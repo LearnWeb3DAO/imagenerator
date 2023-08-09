@@ -5,14 +5,11 @@ import { useEffect, useState } from "react";
 
 
 export default function Home() {
-  const [thePrompt, setThePrompt] = useState<string | undefined>(undefined);
+  const [thePrompt, setThePrompt] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [apiResponse, setApiResponse] = useState("");
 
 
-  useEffect(()=>{
-    console.log(thePrompt)
-  }, [thePrompt])
 
   const generateImage = async () => {
     setIsLoading(true);
@@ -20,8 +17,6 @@ export default function Home() {
       setIsLoading(false);
       return;
     }
-    // const formData = new FormData();
-    // formData.set("theImage", thePrompt);
 
     try {
       const response = await fetch("/api", {
@@ -36,12 +31,13 @@ export default function Home() {
         const blob= await response.blob()
 
         const imageUrl = URL.createObjectURL(blob)
+        console.log(imageUrl)
         
         console.log(blob)
         setApiResponse(imageUrl);
         setIsLoading(false);
       } else {
-        console.error("Failed to upload file");
+        console.error("Failed to generate image");
         setIsLoading(false);
       }
     } catch (error) {
